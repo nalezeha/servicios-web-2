@@ -31,6 +31,12 @@ app.post("/sign-up", async (req, res) => {
     return res.status(400).json({ error: "El correo no está definido" });
   }
 
+  const formatoCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!formatoCorreo.test(correo)) {
+    return res.status(400).json({ error: "El correo no es válido" });
+  }
+
   if (!contrasena) {
     return res.status(400).json({ error: "La contraseña no está definida" });
   }
@@ -144,6 +150,10 @@ app.delete("/usuarios/:id", async (req, res) => {
   return res.status(200).json({ message: "Usuario eliminado exitosamente" });
 });
 
-app.listen(port, () => {
-  console.log(`Servidor escuchando en http://localhost:${port}`);
-});
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Servidor escuchando en http://localhost:${port}`);
+  });
+}
+
+module.exports = app;
